@@ -1,0 +1,116 @@
+body {
+    background: pink;
+}
+
+div {
+    position: absolute;
+    color: rgba(255,255,255,0.7);
+    font-size: 20px;
+    font-weight: bolder;
+}
+#menu {
+    text-decoration: none;
+    position: absolute;
+    top: 250px;
+    left: 600px;
+    color: rgba(255,255,255,0.7);
+    padding: 0.6em;
+    background-color: rgba(236,106,106,0.4);
+    z-index: 10;
+    border-radius: 6%;
+}
+
+#lose {
+    position: absolute;
+    top: 100px;
+    left: 570px;
+    color: rgba(255,255,255,0.7);
+    font-size: 29px;
+}
+
+#score {
+     position: absolute;
+     top: 50px;
+     left: 10px;
+     color: rgba(255,255,255,0.7);
+     font-size: 20px;
+    font-weight: bolder;
+}
+
+#hp {
+    position: absolute;
+    top: 90px;
+    left: 10px;
+    color: rgba(255,255,255,0.7);
+    font-size: 20px;
+    font-weight: bolder;
+}
+
+#gun {
+    position: absolute;
+    top: 130px;
+    left: 10px;
+    color: rgba(255,255,255,0.7);
+    font-size: 20px;
+    font-weight: bolder;
+}
+
+#ammunition {
+    position: absolute;
+    top: 170px;
+    left: 10px;
+    color: rgba(255,255,255,0.7);
+    font-size: 20px;
+    font-weight: bolder;
+}
+
+#level {
+    position: absolute;
+    top: 210px;
+    left: 10px;
+    color: rgba(255,255,255,0.7);
+    font-size: 20px;
+    font-weight: bolder;
+}
+
+#opened {
+    position: absolute;
+    top: 250px;
+    left: 10px;
+}
+
+#pistol {
+    position: absolute;
+    top: 270px;
+    left: 20px;
+}
+
+#uzi {
+    position: absolute;
+    top: 290px;
+    left: 20px;
+}
+
+#shotgun {
+    position: absolute;
+    top: 310px;
+    left: 20px;
+    ;
+}
+
+
+#menu:hover {
+    background-color: rgba(236,106,106,0.6);
+}
+
+#canvas {
+    z-index: 1;
+}
+
+#game {
+    background: pink;
+}
+
+#canvas {
+    margin-left: 170px;
+}
