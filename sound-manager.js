@@ -48,7 +48,7 @@ var soundManager = {
         }
     },
     play: function (path, settings) {
-        return;
+        //return;
         if (!soundManager.loaded) {
             setTimeout(function () {
                 soundManager.play(path,settings);
