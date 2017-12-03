@@ -26,10 +26,9 @@ var spriteManager = {
     },
     parseAtlas: function (atlasJSON) { // разбор атласа с обеъектами
         var atlas = JSON.parse(atlasJSON);
-        for (var name in atlas.frames) { // проход по всем именам в frames
-            var frame = atlas.frames[name].frame; // получение спрайта и сохранение в frame
-            this.sprites.push({name: name, x:frame.x, y: frame.y, w: frame.w, h: frame.h}); // сохранение характеристик frame в виде объекта
-        }
+        atlas.forEach(item => {
+            this.sprites.push({name: item.name, x:item.x, y: item.y, w: item.width, h: item.height}); // сохранение характеристик frame в виде объекта
+        });
         this.jsonLoaded = true; // атлас разобран
     },
     drawSprite: function (ctx, name, x, y, curFrame, size) {
@@ -40,26 +39,18 @@ var spriteManager = {
             }, 100);
         } else {
             var sprite = this.getSprite(name); // получить спрайт по имени
+           
             if (!mapManager.isVisible(x, y, sprite.w, sprite.h))
                 return; // не рисуем за пределами видимой зоны
             x -= mapManager.view.x;
             y -= mapManager.view.y;
             // отображаем спрайт на холсте
-            // ctx.drawImage(this.image, sprite.x, sprite.y, sprite.w, sprite.h, x, y, sprite.w, sprite.h);
-            if (name.match(/bullet/) || name.match(/box/)) {
-                ctx.drawImage(this.image, sprite.x, sprite.y, sprite.w, sprite.h, x, y, sprite.w, sprite.h);
-            } else {
-                ctx.drawImage(this.image, size * curFrame, sprite.y, size, sprite.h, x, y, size, sprite.h);
-            }
+            ctx.drawImage(this.image, sprite.x, sprite.y, sprite.w, sprite.h, x, y, sprite.w, sprite.h);
 
         }
     },
     getSprite: function (name) { // получить спрайт по имени
-        for (var i = 0; i < this.sprites.length; i++) {
-            var s = this.sprites[i];
-            if (s.name === name)
-                return s;
-        }
-        return null; // не нашли спрайт
+        var sprite = this.sprites.find(x=>x.name == name);
+        return sprite;
     }
 };

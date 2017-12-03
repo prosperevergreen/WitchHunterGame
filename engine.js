@@ -44,28 +44,13 @@ var Player = Entity.extend({
         var result = physicManager.update(this);
         if (result === 'stop') {this.currentFrame = 0;}
         if (result === 'stop' && this.shooting) {this.currentFrame = 5; this.shooting = false;}
-        if (result === 'move_left') {this.direction = 0; this.dirSprite = 'hero_left';}
-        if (result === 'move_right') {this.direction = 1; this.dirSprite = 'hero_right';}
-        if (result === 'move_up') {this.direction = 3; this.dirSprite = 'hero_back';}
-        if (result === 'move_down') {this.direction = 2; this.dirSprite = 'hero_front';}
+        if (result === 'move_left') {this.direction = 0; this.dirSprite = 'witch-left';}
+        if (result === 'move_right') {this.direction = 1; this.dirSprite = 'witch-right';}
+        if (result === 'move_up') {this.direction = 3; this.dirSprite = 'witch-back';}
+        if (result === 'move_down') {this.direction = 2; this.dirSprite = 'witch-front';}
     },
     onTouchEntity: function (obj) { // обработка столкновения с препятствием
-        if (obj.name.match(/box/)) {
-            soundManager.play("music/reload.mp3", {looping:false, volume: 1});
-            var resolution = Math.random();
-            if (resolution >= 0.27 && resolution <= 74) {
-                this.ammunition += 15;
-                document.getElementById("ammunition").innerHTML = 'Ammunition: ' + this.ammunition;
-            } else {
-                if (this.lifetime < 100) {
-                    this.lifetime += 50;
-                    if (this.lifetime > 100)
-                        this.lifetime = 100;
-                    document.getElementById("hp").innerHTML = 'HP: ' + this.lifetime;
-                }
-            }
-            obj.kill();
-        }
+        
     },
     kill: function () { // уничтожение объекта
         gameManager.player = null;
@@ -187,7 +172,6 @@ var Player = Entity.extend({
                 gameManager.entities.push(bullet2);
                 gameManager.entities.push(bullet3);
             }
-            document.getElementById("ammunition").innerHTML = 'Ammunition: ' + this.ammunition;
             this.shooting = true;
             switch (this.currentFrame) {
                 case 0:
@@ -242,7 +226,7 @@ var Player = Entity.extend({
 var Spawn = Entity.extend({
     count: 0,
     update: function () {
-        var obj = Object.create(Zombie);
+        var obj = Object.create(Spirit);
         obj.pos_x = this.pos_x;
         obj.pos_y = this.pos_y;
         obj.size_x = 35;
@@ -270,32 +254,32 @@ var Bullet = Entity.extend({
     draw: function (ctx) {
         if (gameManager.player.gun.match(/Pistol/)) {
             if (this.move_x === 1) {
-                spriteManager.drawSprite(ctx, "bullet_right", this.pos_x, this.pos_y, 1, 20);
+                spriteManager.drawSprite(ctx, "bullet", this.pos_x, this.pos_y, 1, 20);
             }
             if (this.move_x === -1) {
-                spriteManager.drawSprite(ctx, "bullet_left", this.pos_x, this.pos_y, 1, 20);
+                spriteManager.drawSprite(ctx, "bullet", this.pos_x, this.pos_y, 1, 20);
             }
             if (this.move_y === 1) {
-                spriteManager.drawSprite(ctx, "bullet_front", this.pos_x, this.pos_y, 1, 20);
+                spriteManager.drawSprite(ctx, "bullet", this.pos_x, this.pos_y, 1, 20);
             }
             if (this.move_y === -1) {
-                spriteManager.drawSprite(ctx, "bullet_back", this.pos_x, this.pos_y, 1, 20);
+                spriteManager.drawSprite(ctx, "bullet", this.pos_x, this.pos_y, 1, 20);
             }
         } else if (gameManager.player.gun.match(/Uzi/)) {
             if (this.move_x === 1) {
-                spriteManager.drawSprite(ctx, "uzi_bullet_right", this.pos_x, this.pos_y, 1, 10);
+                spriteManager.drawSprite(ctx, "bullet", this.pos_x, this.pos_y, 1, 20);
             }
             if (this.move_x === -1) {
-                spriteManager.drawSprite(ctx, "uzi_bullet_left", this.pos_x, this.pos_y, 1, 10);
+                spriteManager.drawSprite(ctx, "bullet", this.pos_x, this.pos_y, 1, 20);
             }
             if (this.move_y === 1) {
-                spriteManager.drawSprite(ctx, "uzi_bullet_front", this.pos_x, this.pos_y, 1, 10);
+                spriteManager.drawSprite(ctx, "bullet", this.pos_x, this.pos_y, 1, 20);
             }
             if (this.move_y === -1) {
-                spriteManager.drawSprite(ctx, "uzi_bullet_back", this.pos_x, this.pos_y, 1, 10);
+                spriteManager.drawSprite(ctx, "bullet", this.pos_x, this.pos_y, 1, 20);
             }
         } else {
-            spriteManager.drawSprite(ctx, "shotgun_bullet", this.pos_x, this.pos_y, 1, 10);
+            spriteManager.drawSprite(ctx, "bullet", this.pos_x, this.pos_y, 1, 20);
         }
     },
     update: function () {
@@ -328,7 +312,7 @@ var Bullet = Entity.extend({
     }
 });
 
-var Zombie = Entity.extend({
+var Spirit = Entity.extend({
     lifetime: 100,
     move_x: 0, move_y: 0, // направление движения
     speed: 6, // скорость объекта
@@ -339,7 +323,7 @@ var Zombie = Entity.extend({
     frameReload: 0,
     pathReload: 0,
 
-    dirSprite: 'zombie_front',
+    dirSprite: 'spirit',
     draw: function (ctx) {
         if (this.currentFrame < 4) {
             spriteManager.drawSprite(ctx, this.dirSprite, this.pos_x, this.pos_y, this.currentFrame, 50);
@@ -385,22 +369,6 @@ var Zombie = Entity.extend({
             if (result === 'stop') {
                 this.currentFrame = 0;
             }
-            if (result === 'move_left') {
-                this.direction = 0;
-                this.dirSprite = 'zombie_left';
-            }
-            if (result === 'move_right') {
-                this.direction = 1;
-                this.dirSprite = 'zombie_right';
-            }
-            if (result === 'move_up') {
-                this.direction = 3;
-                this.dirSprite = 'zombie_back';
-            }
-            if (result === 'move_down') {
-                this.direction = 2;
-                this.dirSprite = 'zombie_front';
-            }
         } else {
             this.move_x = 0; this.move_y = 0;
             if (this.currentFrame == 6)
@@ -414,7 +382,7 @@ var Zombie = Entity.extend({
                 this.attackReload = 0;
                 this.currentFrame = 6;
                 obj.lifetime -= 20;
-                document.getElementById("hp").innerHTML = 'HP: ' + obj.lifetime;
+                document.getElementById("hp").innerHTML = 'Жизни: ' + obj.lifetime;
                 if (obj.lifetime <= 0)
                     obj.kill();
             }
@@ -425,7 +393,7 @@ var Zombie = Entity.extend({
     },
     kill: function () {
         gameManager.score++;
-        document.getElementById("score").innerHTML = 'Score: ' + gameManager.score;
+        document.getElementById("score").innerHTML = 'Очки: ' + gameManager.score;
         var obj = Object.create(Blood);
         obj.size_x = 80; obj.size_y = 80;
         obj.name = "blood" + (++gameManager.bloodNum); // счетчик выстрелов
@@ -442,20 +410,6 @@ var Zombie = Entity.extend({
     }
 });
 
-var Box = Entity.extend({
-    move_x:0, move_y: 0,
-    size_x: 30, size_y: 30,
-    draw: function (ctx) {
-        spriteManager.drawSprite(ctx,"box", this.pos_x, this.pos_y,0, 30);
-    },
-    kill: function () {
-        gameManager.kill(this);
-    },
-    update: function () {
-        //physicManager.update(this);
-    }
-});
-
 var Blood = Entity.extend({
     move_x: 0, move_y:0,
     size_x: 80, size_y: 80,
@@ -463,7 +417,7 @@ var Blood = Entity.extend({
 
     },
     draw: function () {
-        spriteManager.drawSprite(ctx,"blood", this.pos_x, this.pos_y, 0, 80);
+        spriteManager.drawSprite(ctx,"blood_80_80", this.pos_x, this.pos_y, 0, 80);
     },
     kill: function () {
         gameManager.kill(this);
@@ -486,7 +440,6 @@ var gameManager = { // менеджер игры
     zombieMaxNum: 0,
     score: 0,
     time: 5,
-    boxLoop: 0,
     level: 1,
     bloodNum: 0,
     boxNum: 0,
@@ -500,31 +453,9 @@ var gameManager = { // менеджер игры
     kill: function (obj) {
         this.laterKill.push(obj);
     },
-    createBox: function () {
-        var obj = Object.create(Box);
-        obj.name = 'box' + (++this.boxNum);
-        do {
-            var x = Math.random() * 1400;
-            var y = Math.random() * 1400;
-            var e = physicManager.entityAtXY(obj, x, y);
-        }
-        while (e != null);
-
-
-        obj.pos_y = y + 5;
-        obj.pos_x = x + 5;
-        obj.size_x = 25;
-        obj.size_y = 25;
-        this.entities.push(obj);
-    },
     update: function () { // обновление информации
         if (this.player === null)
             return;
-        if (this.boxLoop >= (100 + this.level*35)) {
-            this.createBox();
-            this.boxLoop = 0;
-        }
-        this.boxLoop++;
         this.player.move_x = 0;
         this.player.move_y = 0;
         // if (eventsManager.action["up"]) this.player.move_y = -1;
@@ -537,32 +468,9 @@ var gameManager = { // менеджер игры
         if (this.lastKeys[this.lastKeys.length-1] === "right") this.player.move_x = 1;
 
         if (eventsManager.action["fire"]) this.player.fire();
-        if (eventsManager.action["pistol"]) {
-            gameManager.player.gun = 'Pistol';
-            document.getElementById("gun").innerHTML = 'Gun: ' + gameManager.player.gun;
-            eventsManager.action["pistol"] = false;
-            soundManager.play('music/took_gun.mp3',{looping: false, volume: 1});
-        }
-        if (eventsManager.action["uzi"]) {
-            if (this.level >= 3) {
-                gameManager.player.gun = 'Uzi';
-                document.getElementById("gun").innerHTML = 'Gun: ' + gameManager.player.gun;
-                eventsManager.action["uzi"] = false;
-                soundManager.play('music/took_gun.mp3', {looping: false, volume: 1});
-            } else {
-                soundManager.play('music/cant_use.mp3', {looping: false, volume: 1});
-            }
-        }
-        if (eventsManager.action["shotgun"]) {
-            if (this.level >= 4) {
-                gameManager.player.gun = 'Shotgun';
-                document.getElementById("gun").innerHTML = 'Gun: ' + gameManager.player.gun;
-                eventsManager.action["shotgun"] = false;
-                soundManager.play('music/took_gun.mp3', {looping: false, volume: 1});
-            } else {
-                soundManager.play('music/cant_use.mp3', {looping: false, volume: 1});
-            }
-        }
+        soundManager.play('music/took_gun.mp3',{looping: false, volume: 1});
+        gameManager.player.gun = 'Pistol';
+        eventsManager.action["pistol"] = false;
 
         if (eventsManager.action["killAll"]) {
             for (var i = 0; i < gameManager.entities.length; i++) {
@@ -579,9 +487,6 @@ var gameManager = { // менеджер игры
             } catch(ex) {}
         });
         this.time++;
-        // for (var entity in this.entities) {
-        //     entity.update();
-        // }
 
         // удаление всех объектов попавших в laterKill
         for(var i = 0; i < this.laterKill.length; i++) {
@@ -600,32 +505,7 @@ var gameManager = { // менеджер игры
             //this.zombieNum = 1;
             this.zombieMaxNum = 0;
             this.level++;
-            if (this.level >= 3) {
-                document.getElementById('uzi').style.display = 'block';
-                if (this.level === 3) {
-                    document.getElementById("openedUzi").style.display = 'block';
-                    document.getElementById("openedUzi").style.top = '250px';
-                    document.getElementById("openedUzi").style.left = '530px';
-                    document.getElementById("openedUzi").style.fontSize = '33px';
-                    document.getElementById("openedUzi").style.color = 'green';
-                    setTimeout(function () {
-                        document.getElementById("openedUzi").style.display = 'none';
-                    }, 3000);
-                }
-            }
-            if (this.level >= 4) {
-                document.getElementById('shotgun').style.display = 'block';
-                if (this.level === 4) {
-                    document.getElementById("openedShotgun").style.display = 'block';
-                    document.getElementById("openedShotgun").style.top = '250px';
-                    document.getElementById("openedShotgun").style.left = '530px';
-                    document.getElementById("openedShotgun").style.fontSize = '33px';
-                    document.getElementById("openedShotgun").style.color = 'green';
-                    setTimeout(function () {
-                        document.getElementById("openedShotgun").style.display = 'none';
-                    }, 3000);
-                }
-            }
+            
             this.newLevel = true;
             document.getElementById("levelToChange").style.display = 'block';
             document.getElementById("levelToChange").innerHTML = 'Level ' + this.level;
@@ -633,7 +513,7 @@ var gameManager = { // менеджер игры
             document.getElementById("levelToChange").style.left = '630px';
             document.getElementById("levelToChange").style.fontSize = '33px';
             document.getElementById("levelToChange").style.color = 'black';
-            document.getElementById("level").innerHTML = 'Level: ' + this.level;
+            document.getElementById("level").innerHTML = 'Уровень: ' + this.level;
 
             setTimeout(function () {
                 document.getElementById("levelToChange").style.display = 'none';
@@ -656,10 +536,9 @@ var gameManager = { // менеджер игры
         soundManager.play('music/fon2.mp3', {looping: true, volume: 1});
         soundManager.play('music/Fon.mp3',{looping: true, volume: 1});
         mapManager.loadMap("map.json"); // загрузка карты
-        spriteManager.loadAtlas("atlas.json", "images/sprite.png"); // загрузка атласа
+        spriteManager.loadAtlas("sprites.json", "images/spritesheet.png"); // загрузка атласа
         gameManager.factory['Player'] = Player; // инициализация фабрики
-        gameManager.factory['Zombie'] = Zombie;
-        gameManager.factory['Box'] = Box;
+        gameManager.factory['Zombie'] = Spirit;
         gameManager.factory['Bullet'] = Bullet;
         gameManager.factory['Spawn'] = Spawn;
         mapManager.parseEntities(); // разбор сущностей карты

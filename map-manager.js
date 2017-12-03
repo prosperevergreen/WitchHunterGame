@@ -176,7 +176,7 @@ var mapManager = {
                                 obj.size_x = 30;
                                 obj.size_y = 35;
                                 //инициализируем параметры игрока
-                                obj.dirSprite = 'hero_left';
+                                obj.dirSprite = 'witch-left';
                                 gameManager.initPlayer(obj);
                             }
                         } catch (ex) {

@@ -12,8 +12,6 @@ var eventsManager = {
         this.bind[68] = 'right'; // d - двигаться вправо
         this.bind[32] = 'fire'; // пробел - выстрелить
         this.bind[49] = 'pistol';
-        this.bind[50] = 'uzi';
-        this.bind[51] = 'shotgun';
         this.bind[99] = 'killAll';
         // контроль событий клавиатуры
         document.body.addEventListener("keydown", this.onKeyDown);
