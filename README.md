@@ -8,12 +8,12 @@ Install Nginx and set `index.html` as root folder
 
 1. Enter user name and start game.
 
-#### Controls
+#### Control Keys
 
-Key `w` - move up,
-Key `a` - move left,
-Key `d` - move right,
-Key `s` - move down,
-Key `space` - shoot,
-Key `1` - select single bullet,
-key `2` - select multiple bullet. 
+`w` - move up,
+`a` - move left,
+`d` - move right,
+`s` - move down,
+`space` or `⎵` - shoot,
+`1` - select single bullet,
+`2` - select multiple bullet. 
