@@ -2,6 +2,16 @@
 ///////////////////////////////////////////////
 ////////////ENTITIES//////////////////////////
 /////////////////////////////////////////////
+/////////////////////////////////////////////
+function store(argument, value) {
+    localStorage.setItem(argument, value);
+}
+
+function read(argument){
+    return localStorage.getItem(argument);
+}
+var name = read("nickname");
+document.getElementById('user').innerText = name;
 
 var Entity = {
     pos_x: 0, pos_y: 0, // позиция объекта
@@ -19,15 +29,15 @@ var Entity = {
 };
 
 var Player = Entity.extend({
-    lifetime: 10,
+    lifetime: 100,
     currentFrame: 0,
     direction: 1,
     dirSprite: null,
     lastFrame: 0,
     shooting: false,
-    gun: 'pistol',
+    gun: 'Uzi',
     frameReload: 0,
-    ammunition: 20,
+    ammunition: 100000,
     move_x: 0, move_y: 0, // направление движения
     speed: 15, // скорость объекта
     draw: function (ctx) { // прорисовка объекта
@@ -50,24 +60,30 @@ var Player = Entity.extend({
         if (result === 'move_down') {this.direction = 2; this.dirSprite = 'witch-front';}
     },
     onTouchEntity: function (obj) { // обработка столкновения с препятствием
-        
+
     },
     kill: function () { // уничтожение объекта
-        
+
         gameManager.kill(this);
 
         localStorage.setItem("lastScore", gameManager.score);
+        store(name,gameManager.score)
 
-        window.location = 'menu.html';
+        window.location = 'index.html';
     },
     fire: function () { // выстрел
-        var shotgun = false;
+        var shotgun = true;
+        if (this.gun.match(/Pistol/))
+        {
+          shotgun = false;
+        }
         if ((gameManager.time >= 5 && this.gun.match(/Pistol/)) ||
             (gameManager.time >= 2 && this.gun.match(/Uzi/)) || (gameManager.time >= 5 && this.gun.match(/Shotgun/))) {
             gameManager.time = 0;
         } else return;
         if (this.ammunition > 0 || (this.ammunition === 0 && this.gun.match(/Pistol/))) {
             var bullet = Object.create(Bullet);
+            //alert(this.gun)
             if (this.gun.match(/Pistol/)) {
                 soundManager.play('music/shoot.mp3', {looping: false, volume: 1});
                 bullet.speed = 50;
@@ -78,14 +94,14 @@ var Player = Entity.extend({
             }
             else if (this.gun.match(/Uzi/)) {
                 this.ammunition--;
-                soundManager.play('music/uzi_shoot.mp3', {looping: false, volume: 1});
                 bullet.speed = 80;
                 bullet.name = "bullet_uzi" + (++gameManager.fireNum);
                 bullet.size_x = 17; bullet.size_y = 17;
                 bullet.move_x = this.move_x;
                 bullet.move_y = this.move_y;
             } else {
-                this.ammunition--;
+                soundManager.play('music/pew-pew-sound.mp3', {looping: false, volume: 1});
+                //this.ammunition--;
                 shotgun = true;
                 var bullet2 = Object.create(Bullet);
                 var bullet3 = Object.create(Bullet);
@@ -372,11 +388,11 @@ var Spirit = Entity.extend({
                 this.attackReload = 0;
                 this.currentFrame = 6;
                 obj.lifetime -= 20;
-                document.getElementById("hp").innerHTML = 'Жизни: ' + obj.lifetime;
+                document.getElementById("hp").innerHTML = 'Life: ' + obj.lifetime;
                 if (obj.lifetime <= 0){
                     obj.kill();
                 }
-                
+
             }
         }
     },
@@ -385,7 +401,7 @@ var Spirit = Entity.extend({
     },
     kill: function () {
         gameManager.score++;
-        document.getElementById("score").innerHTML = 'Очки: ' + gameManager.score;
+        document.getElementById("score").innerHTML = 'Points: ' + gameManager.score;
         var obj = Object.create(Blood);
         obj.size_x = 80; obj.size_y = 80;
         obj.name = "blood" + (++gameManager.bloodNum); // счетчик выстрелов
@@ -460,7 +476,6 @@ var gameManager = { // менеджер игры
         if (this.lastKeys[this.lastKeys.length-1] === "right") this.player.move_x = 1;
 
         if (eventsManager.action["fire"]) this.player.fire();
-        gameManager.player.gun = 'Pistol';
         eventsManager.action["pistol"] = false;
 
         if (eventsManager.action["killAll"]) {
@@ -522,8 +537,8 @@ var gameManager = { // менеджер игры
     },
     loadAll: function () {
         soundManager.init();
-        soundManager.loadArray(['music/main.mp3',"music/shoot.mp3","music/attack.mp3"]);
-       // soundManager.play('music/main.mp3',{looping: true, volume: 1});
+        soundManager.loadArray(['music/main.mp3',"music/shoot.mp3", "music/pew-pew-sound.mp3", "music/attack.mp3"]);
+        soundManager.play('music/main.mp3',{looping: true, volume: 1});
         mapManager.loadMap("map.json"); // загрузка карты
         spriteManager.loadAtlas("sprites.json", "images/spritesheet.png"); // загрузка атласа
         gameManager.factory['Player'] = Player; // инициализация фабрики

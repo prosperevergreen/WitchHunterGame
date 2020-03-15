@@ -11,6 +11,7 @@ var eventsManager = {
         this.bind[83] = 'down'; // s - двигаться вниз
         this.bind[68] = 'right'; // d - двигаться вправо
         this.bind[32] = 'fire'; // пробел - выстрелить
+        this.bind[50] = 'shotgun';
         this.bind[49] = 'pistol';
         this.bind[99] = 'killAll';
         // контроль событий клавиатуры
@@ -30,7 +31,18 @@ var eventsManager = {
         }
         if (action === 'fire') {
             eventsManager.action[action] = true;
+          }
+        if(action === 'pistol')
+        {
+          gameManager.player.gun = 'Pistol'
         }
+
+        if(action === 'shotgun')
+        {
+          gameManager.player.gun = 'Shotgun'
+        }
+
+
         if (eventsManager.action['left'] === true || eventsManager.action['right'] === true
             || eventsManager.action['up'] === true || eventsManager.action['down'] === true) {
             if (gameManager.lastKeys.length === 0) {

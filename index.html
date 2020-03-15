@@ -1,25 +1,52 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
-    <title>Ведьмочки Разбитнева</title>
-    <link rel="stylesheet" href="style.css">
-</head>
-<body id="game">
-<div id="lose" style="display: none">Вы проиграли...</div>
-<div id="score">Очки: 0</div>
-<div id="hp">Жизни: 100</div>
-<div id="levelToChange" style="display: none">Уровень 1</div>
-<div id="level">Уровень: 1</div>
-<canvas id="canvas" width="1000" height="610"></canvas>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+        integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <link rel="stylesheet" href="./style.css">
 
-<script src="map-manager.js"></script>
-<script src="sprite-manager.js"></script>
-<script src="event-manager.js"></script>
-<script src="physic-manager.js"></script>
-<script src="sound-manager.js"></script>
-<script src="engine.js"></script>
-<script src="main.js"></script>
-<a id="menu"  href="index.html" style="display: none">Начать заново</a>
+    <title>Menu</title>
+    <script>
+        function store(argument) {
+            if (!localStorage.getItem(argument))
+                localStorage.setItem(argument, 0)
+            else {
+                localStorage.setItem(argument, localStorage.getItem(argument))
+            }
+        }
+    </script>
+</head>
+
+<body>
+    <div class="container-fluid text-center " style="width: 80%;">
+        <h1>Menu</h1>
+        <div id="score" class="list-group"></div>
+        <form action="game.html" method="get" class="action" onsubmit="var nickname = document.getElementById('input').value;
+                            if(nickname.length==0){
+                                alert('Username cannot be empty');
+                                return false
+                            }else{
+                                store(nickname);
+                                localStorage.setItem('nickname', nickname);
+                            }">
+            <div class="form-group">
+                <label for="input">Enter your username:</label>
+                <input type="text" class="form-control" style="width: 50%;" id="input" aria-describedby="userHelp"
+                    placeholder="Username">
+                <small id="userHelp" class="form-text text-muted">This cannot be field empty</small>
+            </div>
+            <button type="submit" id="menu" class="btn btn-secondary btn-lg .btn-block" style="width: 50%;">Start Game</button>
+        </form>
+
+
+        <h3>Highscores:</h3>
+        <div id="score-table"></div>
+
+    </div>
+
+    <script src="result-table.js"></script>
 </body>
+
 </html>

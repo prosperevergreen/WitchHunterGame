@@ -1,23 +1,31 @@
 body {
-    background: pink;
+    background-color: #212121;
+    color: rgba(255,255,255,0.8);
 }
 
 div {
-    position: absolute;
-    color: rgba(255,255,255,0.7);
+    /* position: absolute; */
+    
     font-size: 20px;
     font-weight: bolder;
 }
+
+.form-control {
+    margin: 0 auto;
+}
+
+#menu:hover {
+    background-color: rgba(255,255,255,0.7);
+    color:  #212121;
+}
 #menu {
     text-decoration: none;
-    position: absolute;
-    top: 250px;
-    left: 600px;
     color: rgba(255,255,255,0.7);
-    padding: 0.6em;
-    background-color: rgba(236,106,106,0.4);
-    z-index: 10;
-    border-radius: 6%;
+    background-color: #212121;
+}
+
+ul {
+    padding-inline-start: 0px;
 }
 
 #lose {
@@ -29,10 +37,6 @@ div {
 }
 
 #score, #score-table {
-     position: absolute;
-     top: 50px;
-     left: 10px;
-     color: rgba(220, 40, 40, 0.7);
      font-size: 20px;
     font-weight: bolder;
 }
@@ -102,18 +106,10 @@ div {
     ;
 }
 
-
-#menu:hover {
-    background-color: rgba(236,106,106,0.6);
-}
-
 #canvas {
     z-index: 1;
 }
 
-#game {
-    background: pink;
-}
 
 #canvas {
     margin-left: 170px;
